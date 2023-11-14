@@ -8,6 +8,7 @@
   </head>
   <body>
     
+    @extends('dopetrope.master')
     @include('partials.navbar')
     <div class="container">
         @yield('content')
