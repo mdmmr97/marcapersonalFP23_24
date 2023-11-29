@@ -7,6 +7,7 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReconocimientoController;
 use App\Http\Controllers\CurriculoController;
+use App\Models\Estudiante;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::get('logout', function () {
 });
 
 Route::prefix('catalog')->group(function () {
+
     Route::get('/', [CatalogController::class, 'getIndex']);
 
     Route::get('/show/{id}', [CatalogController::class, 'getShow'])->where('id', '[0-9]+');
@@ -42,12 +44,12 @@ Route::prefix('catalog')->group(function () {
 });
 
 Route::prefix('reconocimientos')->group(function () {
+
     Route::get('/', [ReconocimientoController::class, 'getIndex']);
 
     Route::get('/show/{id}', [ReconocimientoController::class, 'getShow'])->where('id', '[0-9]+');
 
     Route::get('/create', [ReconocimientoController::class, 'getCreate']);
-
 
     Route::put('/edit/{id}', [ReconocimientoController::class, 'putEdit'])->where('id', '[0-9]+');
 
@@ -92,6 +94,52 @@ Route::prefix('curriculos')->group(function () {
 
     Route::put('/edit/{id}', [CurriculoController::class, 'putEdit'])->where('id', '[0-9]+');
 });
+
+Route::get('pruebaDB', function () {
+    /*$estudiantes = Estudiante::all();
+    //dd($estudiantes);
+    foreach( $estudiantes as $estudiante ) {
+        echo $estudiante->nombre . ' ';
+        echo $estudiante->apellidos . '<br />';
+    }*/
+
+    /*$estudiante = Estudiante::findOrFail($id);
+    echo $estudiante->nombre;*/
+
+    /*// Obtener 10 estudiantes con más de 100 votos
+    $estudiantes = Estudiante::where('votos', '>', 100)->take(10)->get();
+
+    foreach( $estudiantes as $estudiante ) {
+        echo $estudiante->nombre . ' ' . $estudiante->votos . '<br />';
+    }*/
+
+    /*$count = Estudiante::where('votos', '>', 100)->count();
+    echo 'Antes: ' . $count . '<br />';*/
+
+    /*$estudiante = new Estudiante;
+    $estudiante->nombre = 'Juan';
+    $estudiante->apellidos = 'Martínez';
+    $estudiante->direccion = 'Dirección de Juan';
+    $estudiante->votos = 130;
+    $estudiante->confirmado = true;
+    $estudiante->ciclo = 'DAW';
+    $estudiante->save();
+
+    echo 'El estudiante tiene el Id: ' . $estudiante->id . '<br />';
+
+    $count = Estudiante::where('votos', '>', 100)->count();
+    echo 'Después: ' . $count . '<br />';*/
+
+    /*$count = Estudiante::count();
+    echo 'Antes: ' . $count . '<br />';
+    $estudiante = Estudiante::find(1);
+    $estudiante->delete();*/
+
+$count = Estudiante::count();
+echo 'Después: ' . $count . '<br />';
+
+    });
+
 
 Route::get('perfil/{id?}', function ($id = null) {
     if ($id == null) {
