@@ -21,11 +21,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call(EstudiantesTableSeeder::class);
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => env('ADMIN_EMAIL', 'admin@email.com'),
-            'password' => env('ADMIN_PASSWORD', 'password'),
-         ]);
+        if (env('APP_DEBUG')){
+            
+            \App\Models\User::factory()->create([
+                'name' => 'Test User',
+                'email' => env('ADMIN_EMAIL', 'admin@email.com'),
+                'password' => env('ADMIN_PASSWORD', 'password'),
+            ]);
+        }
 
         Model::reguard();
 
