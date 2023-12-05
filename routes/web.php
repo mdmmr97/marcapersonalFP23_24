@@ -34,6 +34,7 @@ Route::get('logout', function () {
 });
 
 Route::prefix('catalog')->group(function () {
+
     Route::get('/', [CatalogController::class, 'getIndex']);
 
     Route::get('/show/{id}', [CatalogController::class, 'getShow'])->where('id', '[0-9]+');
@@ -104,6 +105,8 @@ Route::prefix('estudiantes')->group(function () {
     Route::get('/show/{id}', [EstudianteController::class, 'getShow'])->where('id', '[0-9]+');
 
     Route::get('/create', [EstudianteController::class, 'getCreate']);
+
+    Route::post('/', [EstudianteController::class, 'store']);
 
     Route::get('/edit/{id}', [EstudianteController::class, 'getEdit'])->where('id', '[0-9]+');
 
