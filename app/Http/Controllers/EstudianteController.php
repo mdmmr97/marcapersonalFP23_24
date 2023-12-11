@@ -26,6 +26,10 @@ class EstudianteController extends Controller
 
     public function putEdit(Request $request, $id) {
         $estudiante = Estudiante::findOrFail($id);
+        
+        $path = $request->file('avatar')->store('avatars', ['disk' => 'public']);
+        $estudiante->avatar = $path;
+        $estudiante->save();
         //Metodo estatico
         $estudiante->update($request->all());
         /*//Metodo no estatico

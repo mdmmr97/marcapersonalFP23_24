@@ -14,6 +14,6 @@ class Estudiante extends Model
         'apellidos',
         'direccion',
         'votos',
-        'ciclo'
+        'ciclo',
     ];
 }
