@@ -9,12 +9,14 @@ use Illuminate\Http\Request;
 
 class CicloController extends Controller
 {
+
+    public $modelclass = Ciclo::class;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return CicloResource::collection(Ciclo::paginate());
+        return CicloResource::collection(Ciclo::paginate(10));
 
         /*Solucion 1
         $response = CicloResource::collection(Ciclo::paginate())->response();
