@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Helpers\FilterHelper;
 
 class UserController extends Controller
 {
@@ -16,11 +17,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $campos = ['nombre', 'apellidos', 'name', 'email'];
-        $query = User::query();
-
-        foreach($campos as $campo){
-            $query->orWhere($campo, 'like', '%' . $request->q . '%');
-        }
+        $query = FilterHelper::applyFilter($request, $campos);
+        
         return UserResource::collection(
             /*
             User::orwhere('apellidos', 'like', '%' . $request->q . '%')

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\FamiliaProfesionalResource;
 use App\Models\FamiliaProfesional;
 use Illuminate\Http\Request;
+use App\Helpers\FilterHelper;
 
 class FamiliaProfesionalController extends Controller
 {
@@ -16,8 +17,11 @@ class FamiliaProfesionalController extends Controller
      */
     public function index(Request $request)
     {
+        $campos = ['nombre'];
+        $query = FilterHelper::applyFilter($request, $campos);
+
         return FamiliaProfesionalResource::collection(
-            FamiliaProfesional::orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
             ->paginate($request->perPage));
     }
 

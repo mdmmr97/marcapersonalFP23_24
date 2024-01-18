@@ -7,6 +7,7 @@ use App\Http\Resources\CicloResource;
 use App\Http\Resources\ProyectoResource;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use App\Helpers\FilterHelper;
 
 class ProyectoController extends Controller
 {
@@ -17,8 +18,11 @@ class ProyectoController extends Controller
      */
     public function index(Request $request)
     {
+        $campos = ['nombre', 'dominio'];
+        $query = FilterHelper::applyFilter($request, $campos);
+
         return ProyectoResource::collection(
-            Proyecto::orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
                 ->paginate($request->perPage)
         );
     }

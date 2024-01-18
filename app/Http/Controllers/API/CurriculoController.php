@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Curriculo;
 use Illuminate\Http\Request;
 use App\Http\Resources\CurriculoResource;
+use App\Helpers\FilterHelper;
 
 class CurriculoController extends Controller
 {
@@ -15,8 +16,11 @@ class CurriculoController extends Controller
      */
     public function index(Request $request)
     {
+        $campos = ['video_curriculum', 'pdf_curriculum'];
+        $query = FilterHelper::applyFilter($request, $campos);
+        
         return CurriculoResource::collection(
-            Curriculo::orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
             ->paginate($request->perPage)
         );
     }

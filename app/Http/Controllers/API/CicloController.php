@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CicloResource;
 use App\Models\Ciclo;
 use Illuminate\Http\Request;
+use App\Helpers\FilterHelper;
 
 class CicloController extends Controller
 {
@@ -16,11 +17,7 @@ class CicloController extends Controller
     public function index(Request $request)
     {
         $campos = ['nombre'];
-        $query = Ciclo::query();
-
-        foreach($campos as $campo){
-            $query->orWhere($campo, 'like', '%' . $request->q . '%');
-        }
+        $query = FilterHelper::applyFilter($request, $campos);
 
         return CicloResource::collection(
             $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
