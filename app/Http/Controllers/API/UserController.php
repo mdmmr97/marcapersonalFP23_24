@@ -15,9 +15,24 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $campos = ['nombre', 'apellidos', 'name', 'email'];
+        $query = User::query();
+
+        foreach($campos as $campo){
+            $query->orWhere($campo, 'like', '%' . $request->q . '%');
+        }
         return UserResource::collection(
-            User::orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            /*
+            User::orwhere('apellidos', 'like', '%' . $request->q . '%')
+            ->orWhere('nombre', 'like', '%' . $request->q . '%')
+            ->orWhere('name', 'like', '%' . $request->q . '%')
+            ->orWhere('email', 'like', '%' . $request->q . '%')
+            ->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
             ->paginate($request->perPage));
+            */
+            $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            ->paginate($request->perPage)
+        );
     }
 
     /**
