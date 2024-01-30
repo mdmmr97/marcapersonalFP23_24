@@ -29,11 +29,14 @@ use App\Http\Controllers\API\CountController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('v1')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/user', function (Request $request) {
+            $user = $request->user();
+            $user->fullName = $user->nombre . ' ' . $user->apellidos;
+            return $user;
+        });
+    });
     Route::get('{tabla}/count', [CountController::class, 'count']);
     Route::apiResource('ciclos', CicloController::class);
     Route::apiResource('reconocimientos', ReconocimientoController::class);
