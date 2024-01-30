@@ -18,7 +18,7 @@ export const authProvider = {
         if (token) {
             token = JSON.parse(localStorage.getItem('auth'))
             localStorage.removeItem('auth');
-            return dataProvider.deleteToken
+            return dataProvider.deleteToken()
                 .then(() => ('login'))
                 .catch((error) => {
                     throw error
