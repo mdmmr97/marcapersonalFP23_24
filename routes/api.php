@@ -36,6 +36,8 @@ Route::prefix('v1')->group(function () {
             $user->fullName = $user->nombre . ' ' . $user->apellidos;
             return $user;
         });
+        Route::get('curriculos', [CurriculoController::class]);
+        Route::get('curriculos/{curriculo}', [CurriculoController::class]);
 
         Route::apiResource('ciclos', CicloController::class);
         Route::apiResource('reconocimientos', ReconocimientoController::class);
