@@ -42,8 +42,15 @@ class ReconocimientoController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         $reconocimiento = json_decode($request->getContent(), true);
-        $reconocimiento->docente_validador->null;
+        if($user->esEstudiante()){
+            unset($reconocimiento['docente_validador']);
+            $reconocimiento['estudiante_id'] = $user->id;
+        }
+        else if($user->esDocente()){
+            $reconocimiento['docente_validador'] = $user->id;
+        }
         $reconocimiento = Reconocimiento::create($reconocimiento);
 
         return new ReconocimientoResource($reconocimiento);
@@ -62,11 +69,29 @@ class ReconocimientoController extends Controller
      */
     public function update(Request $request, Reconocimiento $reconocimiento)
     {
+        $user = auth()->user();
         $reconocimientoData = json_decode($request->getContent(), true);
-        if($request->user()->esEstudiante()){
-            unset($reconocimientoData->docente_validador);
+        if(!$user->esAdmin() && !$user->esDocente()){
+            $reconocimientoData['docente_validador'] = $reconocimiento->docente_validador;
+            $reconocimientoData['estudiante_id'] = $reconocimiento->estudiante_id;
         }
         $reconocimiento->update($reconocimientoData);
+        return new ReconocimientoResource($reconocimiento);
+    }
+
+    /**
+     * Validar el reconocimiento de una actividad
+     */
+    public function validar($id)
+    {
+        $this->authorize('validar', Reconocimiento::class);
+        $reconocimiento = Reconocimiento::findOrFail($id);
+        // Verifica si la participación aún no ha sido validada
+        // Asigna el ID del usuario autenticado como validador
+        $reconocimiento->docente_validador = auth()->user()->id;
+        $reconocimiento->fecha = date('d/m/Y');
+        $reconocimiento->save();
+
         return new ReconocimientoResource($reconocimiento);
     }
 
@@ -77,4 +102,6 @@ class ReconocimientoController extends Controller
     {
         $reconocimiento->delete();
     }
+
+
 }

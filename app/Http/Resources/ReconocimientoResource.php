@@ -16,11 +16,4 @@ class ReconocimientoResource extends JsonResource
     {
         return parent::toArray($request);
     }
-/*
-    public function validarReconocimiento($reconocimiento, $user){
-        if($user->esAdmin()) return true;
-        if($user->esDocente() && $reconocimiento->docente_validador == null) return true;
-        return false;
-
-    }*/
 }
