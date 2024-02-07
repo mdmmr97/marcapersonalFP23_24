@@ -18,6 +18,10 @@ class ProyectoResource extends JsonResource
             'tutor' => $this->docente ? $this->docente->nombre . " " . $this->docente->apellidos : null,
             'ciclos' => CicloResource::collection($this->ciclos),
             'estudiantes' => $this->users()->get(),
+            'fichero' => $this->fichero
+                         ? [ 'src' => ('storage/' . $this->fichero),
+                             'title' => $this->fichero]
+                         : null,
         ]);
     }
 }

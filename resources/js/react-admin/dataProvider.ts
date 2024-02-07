@@ -19,6 +19,12 @@ const dataProvider = jsonServerProvider(
     httpClient
 );
 
+const originalDataProvider = jsonServerProvider(
+    import.meta.env.VITE_JSON_SERVER_URL,
+    httpClient
+);
+
+
 const apiUrl = `${import.meta.env.VITE_JSON_SERVER_URL}`;
 
 dataProvider.getMany = (resource, params) => {
@@ -27,6 +33,32 @@ dataProvider.getMany = (resource, params) => {
     };
     const url = `${apiUrl}/${resource}?${stringify(query, {arrayFormat: 'bracket'})}`;
     return httpClient(url).then(({ json }) => ({ data: json }));
+};
+
+dataProvider.update = (resource, params) => {
+    if (resource !== 'proyectos' || !params.data.fichero) {
+        return originalDataProvider.update(resource, params);
+    }
+
+    let formData = new FormData();
+    for (const property in params.data) {
+        formData.append(`${property}`, `${params.data[property]}`);
+    }
+
+    formData.append('fichero', params.data.fichero.rawFile)
+    formData.append('_method', 'PUT')
+
+    const url = `${apiUrl}/${resource}/${params.id}`
+    return httpClient(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(json => {
+        return {
+            ...json,
+            data: json.json
+        }
+    })
 };
 
 dataProvider.createToken = (email, password) => {
